@@ -86,3 +86,7 @@ variable "pullsecret" {
   description = "Base64 encoded OCP image pull secret."
 }
 
+variable "mirroredregistry" {
+  type        = string
+  description = "Domain for Mirrored Image Registry"
+}

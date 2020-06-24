@@ -36,6 +36,7 @@ function create_ignition_config(){
 	sudo sed -i -e "s|@vmwaredatastore@|${VM_DSTORE}|" /installer/install-config.yaml
 	sudo sed -i -e "s/@pullsecret@/${PULL_SECRET_DECODE}/" /installer/install-config.yaml
 	sudo sed -i -e "s|@sshkey@|${SSH_KEY}|" /installer/install-config.yaml
+	sudo sed -i -e "s/@mirroredregistry@/${MIRRORED_REGISTRY}/" /installer/install-config.yaml
 	sudo cp /installer/install-config.yaml /installer/install-config.yaml.bak
 	sudo /usr/local/bin/openshift-install create manifests --dir=/installer/	
     sudo sed -i -e "s/mastersSchedulable: true/mastersSchedulable: false/" /installer/manifests/cluster-scheduler-02-config.yml
@@ -125,6 +126,9 @@ function verifyInputs() {
     fi
 	if [ -z "$(echo "${COMPUTE_NODES}" | tr -d '[:space:]')" ]; then
         echo -e "${WARN}Number of compute nodes is missing; using default nodes 2...${REGULAR}"
+    fi
+	if [ -z "$(echo "${MIRRORED_REGISTRY}" | tr -d '[:space:]')" ]; then
+        echo -e "${WARN}Domain for mirror image registry is missing; Exiting...${REGULAR}"
     fi            
 }    
 
@@ -141,7 +145,8 @@ while test ${#} -gt 0; do
     [[ $1 =~ ^-vd|--vcenterdatacenter ]]      && { VCENTER_DC="${2}";                shift 2; continue; };
     [[ $1 =~ ^-vs|--vmwaredatastore ]]     && { VM_DSTORE="${2}";               shift 2; continue; };
     [[ $1 =~ ^-s|--pullsecret ]]     && { PULL_SECRET="${2}";         shift 2; continue; };
-    [[ $1 =~ ^-h|--host ]]     && { INFRA_IP="${2}";         shift 2; continue; };	
+    [[ $1 =~ ^-h|--host ]]     && { INFRA_IP="${2}";         shift 2; continue; };
+	[[ $1 =~ ^-mr|--mirroredregistry ]]     && { MIRRORED_REGISTRY="${2}";         shift 2; continue; };	
     break;
 done
 
