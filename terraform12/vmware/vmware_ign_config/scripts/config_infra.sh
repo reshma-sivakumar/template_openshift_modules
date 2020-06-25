@@ -36,7 +36,7 @@ function create_ignition_config(){
 	sudo sed -i -e "s|@vmwaredatastore@|${VM_DSTORE}|" /installer/install-config.yaml
 	sudo sed -i -e "s/@pullsecret@/${PULL_SECRET_DECODE}/" /installer/install-config.yaml
 	sudo sed -i -e "s|@sshkey@|${SSH_KEY}|" /installer/install-config.yaml
-	sudo sed -i -e "s/@mirroredregistry@/${MIRRORED_REGISTRY}/" /installer/install-config.yaml
+	sudo sed -i -e "s/@mirroredregistry@/${MIRRORED_REGISTRY_DECODE}/" /installer/install-config.yaml
 	sudo cp /installer/install-config.yaml /installer/install-config.yaml.bak
 	sudo /usr/local/bin/openshift-install create manifests --dir=/installer/	
     sudo sed -i -e "s/mastersSchedulable: true/mastersSchedulable: false/" /installer/manifests/cluster-scheduler-02-config.yml
@@ -179,6 +179,7 @@ if [ -f "/installer/.install_complete" ]; then
 else
 	echo "Initial install"
 	PULL_SECRET_DECODE=`echo $PULL_SECRET | base64 -d`
+	MIRRORED_REGISTRY_DECODE=`echo $MIRRORED_REGISTRY | base64 -d`
 	gen_key
 	get_installer $OCP_VERSION		
 	create_ignition_config

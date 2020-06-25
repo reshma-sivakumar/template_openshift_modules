@@ -26,10 +26,4 @@ platform:
     defaultDatastore: '@vmwaredatastore@'
 pullsecret: '@pullsecret@'
 sshKey: '@sshkey@'
-imageContentSources: 
-- mirrors:
-  - @mirroredregistry@/release
-  source: quay.io/openshift-release-dev/ocp-release
-- mirrors:
-  - @mirroredregistry@/release
-  source: registry.svc.ci.openshift.org/ocp/release
+@mirroredregistry@
